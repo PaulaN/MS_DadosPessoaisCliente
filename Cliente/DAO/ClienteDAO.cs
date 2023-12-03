@@ -37,10 +37,10 @@ namespace AcompanhamentoFisico.DAO
 					dadosPessoais.CPF = reader[3].ToString();
 					dadosPessoais.email = reader[4].ToString();
 					dadosPessoais.dataNascimento = reader[5].ToString();
-				   
-					
+                
 
-					var configuration = new MapperConfiguration(cfg =>
+
+                    var configuration = new MapperConfiguration(cfg =>
 					{
 						cfg.CreateMap<DadosPessoais, DadosPessoaisDTO>();
 					});
@@ -65,7 +65,7 @@ namespace AcompanhamentoFisico.DAO
 		{
 
 			String retorno = "";
-			string sql = "INSERT INTO dbo.DadosPessoaisCliente (nome,CPF,sexo,email,dataNascimento) VALUES (" + "'" + dadosPessoaisDTO.nome + "'" + "," +"'" + dadosPessoaisDTO.CPF + "'" +"," + "'" + dadosPessoaisDTO.sexo + "'" + "," + "'" + dadosPessoaisDTO.email + "'" + "," + "'" + dadosPessoaisDTO.dataNascimento + "'" + ")";
+			string sql = "INSERT INTO dbo.DadosPessoaisCliente (nome,CPF,sexo,email,dataNascimento) VALUES (" + "'" + dadosPessoaisDTO.nome + "'" + "," +"'" + dadosPessoaisDTO.CPF + "'" +"," + "'" + dadosPessoaisDTO.sexo + "'" + "," + "'" + dadosPessoaisDTO.email + "'" + "," + "'" + dadosPessoaisDTO.dataNascimento + "'" +  ")";
 			SqlConnection con = new SqlConnection(conexao);
 			SqlCommand cmd = new SqlCommand(sql, con);
 			cmd.CommandType = CommandType.Text;
@@ -118,7 +118,7 @@ namespace AcompanhamentoFisico.DAO
 			EnderecoClienteDTO enderecoDTO = new EnderecoClienteDTO();
 			EnderecoCliente endereco = new EnderecoCliente();
 
-			string sql = "select endereco.rua,endereco.bairro, endereco.estado, endereco.numero, endereco.cidade, endereco.complemento, endereco.pais from dbo.EnderecoCliente endereco inner join dbo.DadosPessoaisCliente dadosPessoais on endereco.id_pk_cliente = dadosPessoais.id_pk_cliente where CPF =" + CPF;
+			string sql = "select endereco.rua,endereco.bairro, endereco.estado, endereco.numero, endereco.cidade, endereco.complemento, endereco.pais, endereco.CEP from dbo.EnderecoCliente endereco inner join dbo.DadosPessoaisCliente dadosPessoais on endereco.id_pk_cliente = dadosPessoais.id_pk_cliente where CPF =" + CPF;
 
 			SqlConnection con = new SqlConnection(conexao);
 			SqlCommand cmd = new SqlCommand(sql, con);
@@ -139,8 +139,9 @@ namespace AcompanhamentoFisico.DAO
 					endereco.cidade = reader[4].ToString();
 					endereco.complemento = reader[5].ToString();
 					endereco.pais = reader[6].ToString();
+					endereco.CEP = reader[7].ToString();
 
-					var configuration = new MapperConfiguration(cfg =>
+                    var configuration = new MapperConfiguration(cfg =>
 					{
 						cfg.CreateMap<EnderecoCliente, EnderecoClienteDTO>();
 					});
@@ -165,7 +166,7 @@ namespace AcompanhamentoFisico.DAO
 		{
 
 			String retorno = "";
-			string sql = "INSERT INTO dbo.EnderecoCliente (rua,bairro,cidade,estado,numero,pais,complemento,id_pk_cliente) VALUES (" + "'" + endereco.rua + "'" + "," +"'" + endereco.bairro + "'" + "," +"'"+endereco.cidade+"'"+","+ "'" + endereco.estado+"'"+","+ endereco.numero + ","+ "'" + endereco.pais + "'" + ","  + "'" + endereco.complemento + "'" +"," + "(select id_pk_cliente from dbo.DadosPessoaisCliente where CPF=" + CPF.ToString()+")"+" )";
+			string sql = "INSERT INTO dbo.EnderecoCliente (rua,bairro,cidade,estado,numero,pais,complemento,CEP,id_pk_cliente) VALUES (" + "'" + endereco.rua + "'" + "," +"'" + endereco.bairro + "'" + "," +"'"+endereco.cidade+"'"+","+ "'" + endereco.estado+"'"+","+ endereco.numero + ","+ "'" + endereco.pais + "'" + ","  + "'" + endereco.complemento + "'" +"," + "'" + endereco.CEP + "'"+ "," + "(select id_pk_cliente from dbo.DadosPessoaisCliente where CPF=" + CPF.ToString()+")"+" )";
 			SqlConnection con = new SqlConnection(conexao);
 			SqlCommand cmd = new SqlCommand(sql, con);
 			cmd.CommandType = CommandType.Text;
@@ -181,7 +182,7 @@ namespace AcompanhamentoFisico.DAO
 		{
 
 			String retorno = "";
-			string sql = "update dbo.EnderecoCliente set rua="+ "'" + endereco.rua + "'" + ","+ "bairro=" +"'" + endereco.bairro + "'" + "," + "cidade=" +"'" + endereco.cidade + "'" + "," +"estado=" + "'" + endereco.estado + "'" + "," +"numero="+ endereco.numero + "," + "complemento=" + "'" + endereco.complemento + "'" + "," + "pais=" + "'" +  endereco.pais + "'" +  "  where id_pk_cliente = (select id_pk_cliente from dbo.DadosPessoaisCliente where CPF=" + "'" + CPF +"'" +");";
+			string sql = "update dbo.EnderecoCliente set rua="+ "'" + endereco.rua + "'" + ","+ "bairro=" +"'" + endereco.bairro + "'" + "," + "cidade=" +"'" + endereco.cidade + "'" + "," +"estado=" + "'" + endereco.estado + "'" + "," +"numero="+ endereco.numero + "," + "complemento=" + "'" + endereco.complemento + "'" + "," + "pais=" + "'" +  endereco.pais + "'" + "," + "CEP=" + "'" + endereco.CEP +"'" +  "   where id_pk_cliente = (select id_pk_cliente from dbo.DadosPessoaisCliente where CPF=" + "'" + CPF +"'" +");";
 			SqlConnection con = new SqlConnection(conexao);
 			SqlCommand cmd = new SqlCommand(sql, con);
 			cmd.CommandType = CommandType.Text;

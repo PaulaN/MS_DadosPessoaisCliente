@@ -16,5 +16,7 @@
 
 		public String pais { get; set; }
 
-	}
+        public String CEP { get; set; }
+
+    }
 }

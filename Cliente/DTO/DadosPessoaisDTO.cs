@@ -10,6 +10,8 @@ namespace AcompanhamentoFisico.Model
 		public String email { get;set;}
 		public String CPF {get; set;}
 
+     
 
-	}
+
+    }
 }
